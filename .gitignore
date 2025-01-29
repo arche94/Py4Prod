@@ -1,1 +1,5 @@
 assignments/
+backup/
+__pycache__/
+*.rat
+usd_exports/
