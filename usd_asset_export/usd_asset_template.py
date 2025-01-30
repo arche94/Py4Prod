@@ -5,6 +5,7 @@ class UsdAssetTemplate():
     def __init__(self, asset_path):
         self.asset_path = asset_path
         self.name = os.path.basename(self.asset_path).split(".")[0].replace("-", "_")
+        self.templateOut = None
     
     def createTemplate(self):
         root = hou.node("/stage")
@@ -30,6 +31,15 @@ class UsdAssetTemplate():
         usdexport.setInput(0, mats)
 
         root.layoutChildren()
+
+        self.templateOut = usdexport
+
+    def exportAsset(self):
+        if self.templateOut is None:
+            print("No template initialized")
+            return
+
+        self.templateOut.parm("execute").pressButton()
 
     def createSopAssetPrepNet(self, sopcreate):
         root = sopcreate.node("./sopnet/create")
@@ -95,10 +105,9 @@ class UsdAssetTemplate():
 
         matlib.layoutChildren()
 
-def test():
+def convertAsset():
     assetpath = "C:/Users/pprez/Desktop/repos/Py4Prod/usd_asset_export/assets/pp-avatar/pp-avatar.fbx"
     newAssetTemp = UsdAssetTemplate(assetpath)
     newAssetTemp.createTemplate()
-
-if __name__=='__main__':
-    print("Hello from UsdAssetTemplate")
+    newAssetTemp.exportAsset()
+    
